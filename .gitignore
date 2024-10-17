@@ -30,3 +30,4 @@ build/
 *.whl
 image
 result
+image/*
