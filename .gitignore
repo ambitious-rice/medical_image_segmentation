@@ -29,3 +29,4 @@ build/
 *.egg
 *.whl
 image
+result
