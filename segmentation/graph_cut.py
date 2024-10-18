@@ -20,8 +20,8 @@ def graph_cut(image_path, iteration=5):
 
     # 定义矩形区域 (x, y, width, height) - 根据需要调整
     height, width = image.shape[:2]
-    rect = (int(width / 4), int(height / 4), int(width / 1.2),
-            int(height / 1.2))
+    rect = (int(width / 5), int(height / 5), int(width / 1.5),
+            int(height / 1.5))
     # 应用 GrabCut 算法
     cv2.grabCut(image, mask, rect, bgd_model, fgd_model, iteration,
                 cv2.GC_INIT_WITH_RECT)
