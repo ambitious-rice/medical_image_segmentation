@@ -2,10 +2,11 @@ import argparse
 import os
 
 from segmentation.graph_cut import graph_cut
+from segmentation.active_contour import active_contour
 from utils import save_image, save_mask
 from metrics import calculate_metrics
 
-methods = {'graph_cut': graph_cut}
+methods = {'graph_cut': graph_cut, 'active_contour': active_contour}
 
 
 def parse_args():
@@ -13,7 +14,7 @@ def parse_args():
     parser.add_argument('--method',
                         choices=methods.keys(),
                         help='Segmentation method',
-                        default='graph_cut')
+                        default='active_contour')
     parser.add_argument('--data_path',
                         help='Path to the image',
                         default='image/Data/Image')
@@ -24,6 +25,10 @@ def parse_args():
                         type=str,
                         help='Ground truth segmentation',
                         default='image/Data/Annotation')
+    parser.add_argument('--feature',
+                        type=str,
+                        help='Feature for segmentation',
+                        default='gradient')
     return parser.parse_args()
 
 
@@ -32,6 +37,7 @@ if __name__ == "__main__":
     method = args.method
     data_path = args.data_path
     gt_path = args.gt
+    feature = args.feature
     mask_path = os.path.join(args.output_path, method, 'mask')
     visual_path = os.path.join(args.output_path, method, 'visual')
     os.makedirs(mask_path, exist_ok=True)
@@ -39,7 +45,7 @@ if __name__ == "__main__":
 
     for img_name in os.listdir(data_path):
         img_path = os.path.join(data_path, img_name)
-        mask2, segmented_image, image = methods[method](img_path)
+        mask2, segmented_image, _ = methods[method](img_path, feature)
         save_mask(mask2, os.path.join(mask_path, img_name))
         save_image(segmented_image, os.path.join(visual_path, img_name))
         print(
